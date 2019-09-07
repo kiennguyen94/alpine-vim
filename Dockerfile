@@ -65,8 +65,10 @@ RUN apk --update add \
     ctags \
     curl \
     git \
+    shadow \
     ncurses-terminfo \
     python \
+    nodejs nodejs-npm \
 # YouCompleteMe
     && apk add --virtual build-deps \
     build-base \
@@ -79,7 +81,7 @@ RUN apk --update add \
     $UHOME/bundle/YouCompleteMe/ \
     && cd $UHOME/bundle/YouCompleteMe \
     && git submodule update --init --recursive \
-    && $UHOME/bundle/YouCompleteMe/install.py --gocode-completer \
+    && $UHOME/bundle/YouCompleteMe/install.py \
 # Install and compile procvim.vim                        
     && git clone --depth 1 https://github.com/Shougo/vimproc.vim \
     $UHOME/bundle/vimproc.vim \
@@ -101,6 +103,7 @@ RUN apk --update add \
     /var/tmp/* \
     && mkdir /var/cache/apk
 
+RUN usermod -u 1000 developer
 USER $UNAME
 
 # Plugins
@@ -143,6 +146,7 @@ RUN cd $UHOME/bundle/ \
     && git clone --depth 1 https://github.com/derekwyatt/vim-scala \
     && git clone --depth 1 https://github.com/christoomey/vim-tmux-navigator \
     && git clone --depth 1 https://github.com/ekalinin/Dockerfile.vim \
+    && curl --fail -L https://github.com/neoclide/coc.nvim/archive/release.tar.gz|tar xzfv - \
 # Theme
     && git clone --depth 1 \
     https://github.com/altercation/vim-colors-solarized
